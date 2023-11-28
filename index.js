@@ -28,10 +28,34 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         const appertmentCollection = client.db("lakeviewDB").collection("data");
-        app.get('/appartment', async (req, res) => {
+        const userCollection = client.db("lakeviewDB").collection("users");
+        const agreementCollection = client.db("lakeviewDB").collection("agreements");
+
+        app.get('/apartments', async (req, res) => {
             const result = await appertmentCollection.find().toArray();
             res.send(result)
         })
+        // for agreements
+        app.post("/agreements", async (req, res) => {
+            const agreementData = req.body;
+            const result = await agreementCollection.insertOne(agreementData);
+            res.send(result);
+        });
+        app.get('/agreements', async (req, res) => {
+            const result = await agreementCollection.find().toArray();
+            res.send(result)
+        })
+        // for user
+        app.post("/users", async (req, res) => {
+            const user = req.body;
+            const query = { email: user.email };
+            const existingUser = await userCollection.findOne(query);
+            if (existingUser) {
+                return res.send({ message: "user already exists", insertedId: null });
+            }
+            const result = await userCollection.insertOne(user);
+            res.send(result);
+        });
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         // Send a ping to confirm a successful connection
