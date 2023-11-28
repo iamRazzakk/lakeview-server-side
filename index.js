@@ -30,6 +30,7 @@ async function run() {
         const appertmentCollection = client.db("lakeviewDB").collection("data");
         const userCollection = client.db("lakeviewDB").collection("users");
         const agreementCollection = client.db("lakeviewDB").collection("agreements");
+        const announcementsCollection = client.db("lakeviewDB").collection("announcements");
 
         app.get('/apartments', async (req, res) => {
             const result = await appertmentCollection.find().toArray();
@@ -56,6 +57,12 @@ async function run() {
             const result = await userCollection.insertOne(user);
             res.send(result);
         });
+        // for announcement
+        app.post('/announcements', async (req, res) => {
+            const announcement = req.body;
+            const result = await announcementsCollection.insertOne(announcement);
+            res.send(result);
+        })
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         // Send a ping to confirm a successful connection
