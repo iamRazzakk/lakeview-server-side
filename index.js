@@ -90,6 +90,17 @@ async function run() {
             const result = await userCollection.updateOne(filter, updatedDoc)
             res.send(result)
         })
+        app.patch('/users/member/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const updateDoc = {
+                $set: {
+                    role: 'member'
+                }
+            }
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        });
 
         app.delete('/users/:id', async (req, res) => {
             const id = req.params.id;
@@ -117,6 +128,19 @@ async function run() {
             const result = await couponCollection.find().toArray();
             res.send(result)
         })
+        // agrement
+        // app.get()
+        app.patch('/agreement/status/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const updateDoc = {
+                $set: {
+                    status: 'checked'
+                }
+            }
+            const result = await agreementCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        });
 
 
         // Connect the client to the server	(optional starting in v4.7)
