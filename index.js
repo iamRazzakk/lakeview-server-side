@@ -8,11 +8,6 @@ const port = process.env.PORT || 5000
 // middleware
 app.use(cors())
 app.use(express.json())
-// const user = process.env.DB_USER
-// console.log(user);
-// const pass =process.env.DB_PASS
-// console.log(pass);
-
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pii6nyx.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -90,9 +85,9 @@ async function run() {
             const result = await userCollection.updateOne(filter, updatedDoc)
             res.send(result)
         })
-        app.patch('/users/member/:id', async (req, res) => {
-            const id = req.params.id;
-            const filter = { _id: new ObjectId(id) }
+        app.patch('/users/role/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email }
             const updateDoc = {
                 $set: {
                     role: 'member'
@@ -144,9 +139,9 @@ async function run() {
 
 
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
         // Send a ping to confirm a successful c onnection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
